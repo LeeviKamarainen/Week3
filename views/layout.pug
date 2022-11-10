@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    title= title
+    script(type = 'text/javascript' src='/javascripts/main.js')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    block content
+
+    textarea#input-name(name="input-name", cols="30", rows="2") 
+    textarea#input-task(name="input-task", cols="30", rows="2") 
+    button(
+      id = 'submit-data'
+      value = 'Submit'
+    ) Submit 
