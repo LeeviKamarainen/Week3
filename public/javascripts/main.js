@@ -11,7 +11,24 @@ if(document.readyState !== "loading"){
 
 function initializeCode() {
     saveUserInfo();
+    findUser();
     console.log('Script loaded!')
+
+}
+
+
+function findUser() {
+    let searchButton = document.getElementById('search');
+    let searchName = document.getElementById('search-name');
+    searchButton.addEventListener('click', function() {
+        let username = searchName.value
+        fetch('http://localhost:3000/user/'+username)
+        .then(response => response)
+        .then(data => {
+            console.log(data);
+        })
+    });
+
 
 }
 
@@ -20,12 +37,13 @@ function saveUserInfo() {
     let inputName = document.getElementById('input-name');
     let inputTask = document.getElementById('input-task');
 
-    let userdata = {
-        name: inputName.value,
-        todos: inputTask.value
-
-    }
+    
     saveButton.addEventListener('click', function() {
+        let userdata = {
+            name: inputName.value,
+            todos: [inputTask.value]
+    
+        }
         fetch('http://localhost:3000/todo', {
             method: "post",
             headers: {
@@ -38,7 +56,4 @@ function saveUserInfo() {
             console.log(data);
         })
     });
-
-    
-
 }
