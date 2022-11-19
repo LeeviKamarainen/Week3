@@ -16,7 +16,7 @@ function initializeCode() {
     let deleteButton = document.getElementById('delete-user');
     let displayData = document.getElementById('display-data')
     deleteUser();
-    let foundUser;
+    let foundUser = 0;
 
 
     function findUser() {
@@ -29,15 +29,45 @@ function initializeCode() {
             .then(data => {
                 foundUser = data.name;
                 console.log(data)
-                displayData.innerHTML = 'Name: '+data.name+'\nTodos:'+data.todos;
+                displayData.innerHTML = 'Name: '+data.name;
+
+                for (let i = 0; i < data.todos.length; i++) {
+                    var button = document.createElement('button');
+                    button.innerHTML = data.todos[i];
+                    button.username = username;
+                    button.className = 'delete-task';
+                    button.addEventListener('click',deleteTodos);
+                    displayData.appendChild(button);
+                }
+
                 if(data != undefined) {
                     deleteButton.hidden = false;
                 }
             })
         });
-    
-    
     }
+
+    function deleteTodos() {
+        let userData = {
+            name: this.username,
+            todo: this.innerHTML
+        }
+        fetch('http://localhost:3000/user/', {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+               },
+            body: JSON.stringify(userData)
+        })
+        .then(response => response.json())
+        .then(data => {
+           console.log(data)
+            if(data=='Task deleted') {
+                this.remove();
+            }
+        });
+    }
+
 
     function deleteUser() {
         deleteButton.addEventListener('click', function() {
@@ -76,7 +106,7 @@ function initializeCode() {
                 },
                 body: JSON.stringify(userdata)
             })
-            .then(response => response)
+            .then(response => response.json())
             .then(data => {
                 console.log(data);
             })
