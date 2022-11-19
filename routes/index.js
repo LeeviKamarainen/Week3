@@ -21,8 +21,8 @@ router.get('/user/:id', function(req, res, next) {
       break
     }
   }
-  if(userData==0) {
-  res.json('User not found')
+  if(userfound==0) {
+    res.json('User not found')
   } else {
     res.json(alluserData[userIndex])
   }
@@ -43,7 +43,7 @@ router.delete('/user/:id', function(req, res, next) {
     }
   }
   if(userData==0) {
-  res.json('User not found')
+    res.json('User not found')
   }
 });
 

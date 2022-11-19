@@ -27,6 +27,8 @@ function initializeCode() {
             fetch('http://localhost:3000/user/'+username)
             .then(response => response.json())
             .then(data => {
+                if(data != 'User not found') {
+                deleteButton.hidden = false;
                 foundUser = data.name;
                 console.log(data)
                 displayData.innerHTML = 'Name: '+data.name;
@@ -39,10 +41,11 @@ function initializeCode() {
                     button.addEventListener('click',deleteTodos);
                     displayData.appendChild(button);
                 }
-
-                if(data != undefined) {
-                    deleteButton.hidden = false;
-                }
+            }
+            else {
+                displayData.innerHTML = data;
+            }
+                
             })
         });
     }
@@ -109,6 +112,7 @@ function initializeCode() {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                displayData.innerHTML=data;
             })
         });
     }
