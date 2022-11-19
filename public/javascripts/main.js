@@ -8,52 +8,79 @@ if(document.readyState !== "loading"){
     })
 }
 
-
 function initializeCode() {
+    console.log('Script loaded!')
+    
     saveUserInfo();
     findUser();
-    console.log('Script loaded!')
-
-}
-
-
-function findUser() {
-    let searchButton = document.getElementById('search');
-    let searchName = document.getElementById('search-name');
-    searchButton.addEventListener('click', function() {
-        let username = searchName.value
-        fetch('http://localhost:3000/user/'+username)
-        .then(response => response)
-        .then(data => {
-            console.log(data);
-        })
-    });
+    let deleteButton = document.getElementById('delete-user');
+    let displayData = document.getElementById('display-data')
+    deleteUser();
+    let foundUser;
 
 
-}
-
-function saveUserInfo() {
-    let saveButton = document.getElementById('submit-data');
-    let inputName = document.getElementById('input-name');
-    let inputTask = document.getElementById('input-task');
-
+    function findUser() {
+        let searchButton = document.getElementById('search');
+        let searchName = document.getElementById('search-name');
+        searchButton.addEventListener('click', function() {
+            let username = searchName.value
+            fetch('http://localhost:3000/user/'+username)
+            .then(response => response.json())
+            .then(data => {
+                foundUser = data.name;
+                console.log(data)
+                displayData.innerHTML = 'Name: '+data.name+'\nTodos:'+data.todos;
+                if(data != undefined) {
+                    deleteButton.hidden = false;
+                }
+            })
+        });
     
-    saveButton.addEventListener('click', function() {
-        let userdata = {
-            name: inputName.value,
-            todos: [inputTask.value]
     
-        }
-        fetch('http://localhost:3000/todo', {
-            method: "post",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify(userdata)
-        })
-        .then(response => response)
-        .then(data => {
-            console.log(data);
-        })
-    });
+    }
+
+    function deleteUser() {
+        deleteButton.addEventListener('click', function() {
+            fetch('http://localhost:3000/user/'+foundUser, {
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json'
+                   },
+            }).then(response => response.json())
+                .then(data => {
+                console.log(data)
+                deleteButton.hidden = true;
+                displayData.innerHTML = ''
+          });
+        });
+    
+    }
+
+
+    function saveUserInfo() {
+        let saveButton = document.getElementById('submit-data');
+        let inputName = document.getElementById('input-name');
+        let inputTask = document.getElementById('input-task');
+    
+        
+        saveButton.addEventListener('click', function() {
+            let userdata = {
+                name: inputName.value,
+                todos: [inputTask.value]
+        
+            }
+            fetch('http://localhost:3000/todo', {
+                method: "post",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify(userdata)
+            })
+            .then(response => response)
+            .then(data => {
+                console.log(data);
+            })
+        });
+    }
 }
+
