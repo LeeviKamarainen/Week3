@@ -37,7 +37,7 @@ router.delete('/user/:id', function(req, res, next) {
       console.log('Deleted user')
       console.log('Remaining: '+alluserData)
       alluserData.splice(index,1)
-      res.json('Deleted user')
+      res.json('User deleted')
       userfound = 1;
       break
     }
